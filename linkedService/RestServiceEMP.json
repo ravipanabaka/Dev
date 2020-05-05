@@ -1,0 +1,14 @@
+{
+	"name": "RestServiceEMP",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "We are loading the file of employee",
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "http://dummy.restapiexample.com/api/v1/employees",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}

@@ -1,0 +1,32 @@
+{
+	"name": "dataflowsorter",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEMP",
+						"type": "DatasetReference"
+					},
+					"name": "EMP"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEmp_Dept",
+						"type": "DatasetReference"
+					},
+					"name": "SorterEMP"
+				}
+			],
+			"transformations": [
+				{
+					"name": "EMPSorter"
+				}
+			],
+			"script": "source(output(\n\t\tempno as string,\n\t\tename as string,\n\t\tjob as string,\n\t\tmgr as string,\n\t\thiredate as string,\n\t\tsal as string,\n\t\tcomm as string,\n\t\tdeptno as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> EMP\nEMP sort(desc(ename, true),\n\tcaseInsensitive: true,\n\tpartitionLevel: true) ~> EMPSorter\nEMPSorter sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['EMPSorter.csv'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SorterEMP"
+		}
+	}
+}

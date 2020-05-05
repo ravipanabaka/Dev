@@ -1,0 +1,32 @@
+{
+	"name": "dataflowderive",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEMP",
+						"type": "DatasetReference"
+					},
+					"name": "EMP"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEmp_Dept",
+						"type": "DatasetReference"
+					},
+					"name": "EMPtgt"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Derivedcommision"
+				}
+			],
+			"script": "source(output(\n\t\tempno as string,\n\t\tename as string,\n\t\tjob as string,\n\t\tmgr as string,\n\t\thiredate as string,\n\t\tsal as string,\n\t\tcomm as string,\n\t\tdeptno as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> EMP\nEMP derive(comm = iif(isNull(comm),'0',comm),\n\t\tstartdate = currentDate('IST')) ~> Derivedcommision\nDerivedcommision sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['empdervie.csv'],\n\ttruncate: true,\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> EMPtgt"
+		}
+	}
+}

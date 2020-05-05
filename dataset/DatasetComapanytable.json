@@ -1,0 +1,17 @@
+{
+	"name": "DatasetComapanytable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedServiceAzureSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "company"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

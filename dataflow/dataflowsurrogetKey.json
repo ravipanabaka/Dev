@@ -1,0 +1,35 @@
+{
+	"name": "dataflowsurrogetKey",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEMP",
+						"type": "DatasetReference"
+					},
+					"name": "Emp"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEmp_Dept",
+						"type": "DatasetReference"
+					},
+					"name": "tgt"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SurrogateKey1"
+				},
+				{
+					"name": "Select"
+				}
+			],
+			"script": "source(output(\n\t\tempno as string,\n\t\tename as string,\n\t\tjob as string,\n\t\tmgr as string,\n\t\thiredate as string,\n\t\tsal as string,\n\t\tcomm as string,\n\t\tdeptno as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> Emp\nEmp keyGenerate(output(sk as long),\n\tstartAt: 1L) ~> SurrogateKey1\nSurrogateKey1 select(mapColumn(\n\t\tempno = sk,\n\t\tename,\n\t\tjob,\n\t\tmgr,\n\t\thiredate,\n\t\tsal,\n\t\tcomm,\n\t\tdeptno,\n\t\tsk = empno\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select\nSelect sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> tgt"
+		}
+	}
+}

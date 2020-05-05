@@ -1,0 +1,32 @@
+{
+	"name": "dataflowWindowtrans",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEMP",
+						"type": "DatasetReference"
+					},
+					"name": "EMP"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEmp_Dept",
+						"type": "DatasetReference"
+					},
+					"name": "tgtrank"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Window1"
+				}
+			],
+			"script": "source(output(\n\t\tempno as string,\n\t\tename as string,\n\t\tjob as string,\n\t\tmgr as string,\n\t\thiredate as string,\n\t\tsal as integer,\n\t\tcomm as string,\n\t\tdeptno as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> EMP\nEMP window(over(deptno = deptno),\n\tdesc(sal, true),\n\tsum = denseRank()) ~> Window1\nWindow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['rankfile.csv'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> tgtrank"
+		}
+	}
+}

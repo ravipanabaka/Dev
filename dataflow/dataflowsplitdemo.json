@@ -1,0 +1,46 @@
+{
+	"name": "dataflowsplitdemo",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEMP",
+						"type": "DatasetReference"
+					},
+					"name": "EMP"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEmp_Dept",
+						"type": "DatasetReference"
+					},
+					"name": "Deptno30"
+				},
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEmp_Dept",
+						"type": "DatasetReference"
+					},
+					"name": "EMP20"
+				},
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEmp_Dept",
+						"type": "DatasetReference"
+					},
+					"name": "Otherdeptno"
+				}
+			],
+			"transformations": [
+				{
+					"name": "ConditionalSplit1"
+				}
+			],
+			"script": "source(output(\n\t\tempno as string,\n\t\tename as string,\n\t\tjob as string,\n\t\tmgr as string,\n\t\thiredate as string,\n\t\tsal as string,\n\t\tcomm as string,\n\t\tdeptno as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> EMP\nEMP split(equals(deptno,'30'),\n\tequals(deptno, '20'),\n\tdisjoint: false) ~> ConditionalSplit1@(Deptno30, Deptno20, OtherDeptno)\nConditionalSplit1@Deptno30 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['EMP_30.csv'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Deptno30\nConditionalSplit1@Deptno20 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['EMP20'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> EMP20\nConditionalSplit1@OtherDeptno sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['OtherDeptno'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Otherdeptno"
+		}
+	}
+}

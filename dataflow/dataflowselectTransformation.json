@@ -1,0 +1,32 @@
+{
+	"name": "dataflowselectTransformation",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEMP",
+						"type": "DatasetReference"
+					},
+					"name": "EMP"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEmp_Dept",
+						"type": "DatasetReference"
+					},
+					"name": "Tgt"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectColumnsTrans"
+				}
+			],
+			"script": "source(output(\n\t\tempno as string,\n\t\tename as string,\n\t\tjob as string,\n\t\tmgr as string,\n\t\thiredate as string,\n\t\tsal as string,\n\t\tcomm as string,\n\t\tdeptno as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> EMP\nEMP select(mapColumn(\n\t\tempno,\n\t\tename,\n\t\tjob,\n\t\tsal,\n\t\tdeptno\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectColumnsTrans\nSelectColumnsTrans sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['tgttranscolumns.csv'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Tgt"
+		}
+	}
+}

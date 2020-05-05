@@ -1,0 +1,39 @@
+{
+	"name": "Dataflowexists",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEMP",
+						"type": "DatasetReference"
+					},
+					"name": "EMP"
+				},
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextDEPT",
+						"type": "DatasetReference"
+					},
+					"name": "DEPT"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEmp_Dept",
+						"type": "DatasetReference"
+					},
+					"name": "tgt"
+				}
+			],
+			"transformations": [
+				{
+					"name": "ExistsDept"
+				}
+			],
+			"script": "source(output(\n\t\tempno as string,\n\t\tename as string,\n\t\tjob as string,\n\t\tmgr as string,\n\t\thiredate as string,\n\t\tsal as string,\n\t\tcomm as string,\n\t\tdeptno as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> EMP\nsource(output(\n\t\tdeptno as string,\n\t\tdname as string,\n\t\tloc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> DEPT\nEMP, DEPT exists(EMP@deptno == DEPT@deptno,\n\tnegate:false,\n\tbroadcast: 'auto')~> ExistsDept\nExistsDept sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['empexits.csv'],\n\ttruncate: true,\n\tmapColumn(\n\t\tempno,\n\t\tename,\n\t\tjob,\n\t\tmgr,\n\t\thiredate,\n\t\tsal,\n\t\tcomm,\n\t\tdeptno\n\t),\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> tgt"
+		}
+	}
+}

@@ -1,0 +1,38 @@
+{
+	"name": "DataflowsParametarize",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEMP",
+						"type": "DatasetReference"
+					},
+					"name": "EMP"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEmp_Dept",
+						"type": "DatasetReference"
+					},
+					"name": "fileparamvalues"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Filtertingdeptno"
+				},
+				{
+					"name": "DerivedColumnsourcesystem"
+				},
+				{
+					"name": "Select1"
+				}
+			],
+			"script": "parameters{\n\tDeptno as integer,\n\tsourcesystem as string\n}\nsource(output(\n\t\tempno as short,\n\t\tename as string,\n\t\tjob as string,\n\t\tmgr as short,\n\t\thiredate as string,\n\t\tsal as short,\n\t\tcomm as short,\n\t\tdeptno as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> EMP\nEMP filter(deptno==$Deptno) ~> Filtertingdeptno\nFiltertingdeptno derive(sourcesystem = $sourcesystem) ~> DerivedColumnsourcesystem\nDerivedColumnsourcesystem select(mapColumn(\n\t\tsourcesystem,\n\t\tename,\n\t\tjob,\n\t\tmgr,\n\t\thiredate,\n\t\tsal,\n\t\tcomm,\n\t\tdeptno,\n\t\tempno\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['paramvalues'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> fileparamvalues"
+		}
+	}
+}

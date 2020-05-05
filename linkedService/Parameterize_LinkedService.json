@@ -1,0 +1,34 @@
+{
+	"name": "Parameterize_LinkedService",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"parameters": {
+			"DBServerName": {
+				"type": "string"
+			},
+			"STG": {
+				"type": "string"
+			},
+			"User_id": {
+				"type": "string"
+			},
+			"Password": {
+				"type": "string"
+			},
+			"EDW": {
+				"type": "string"
+			},
+			"DM": {
+				"type": "string"
+			},
+			"Domain Name": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=\"@{linkedService().Domain Name}\";Initial Catalog=@{linkedService().DBServerName};User ID=@{linkedService().User_id};Password=@{linkedService().Password}"
+		}
+	}
+}

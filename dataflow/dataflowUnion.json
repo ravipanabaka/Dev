@@ -1,0 +1,46 @@
+{
+	"name": "dataflowUnion",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEMP",
+						"type": "DatasetReference"
+					},
+					"name": "EMP"
+				},
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextBlobravi",
+						"type": "DatasetReference"
+					},
+					"name": "EMP2"
+				},
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextDEPT",
+						"type": "DatasetReference"
+					},
+					"name": "DEPT"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DatasetDelimitedTextEmp_Dept",
+						"type": "DatasetReference"
+					},
+					"name": "TGTUNION"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Union"
+				}
+			],
+			"script": "source(output(\n\t\tempno as string,\n\t\tename as string,\n\t\tjob as string,\n\t\tmgr as string,\n\t\thiredate as string,\n\t\tsal as string,\n\t\tcomm as string,\n\t\tdeptno as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> EMP\nsource(output(\n\t\tdeptno as string,\n\t\tdname as string,\n\t\tloc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> EMP2\nsource(output(\n\t\tdeptno as string,\n\t\tdname as string,\n\t\tloc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> DEPT\nEMP, EMP2, DEPT union(byName: true)~> Union\nUnion sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['emp_union.csv'],\n\ttruncate: true,\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> TGTUNION"
+		}
+	}
+}
