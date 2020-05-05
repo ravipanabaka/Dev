@@ -1,0 +1,284 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "ADFRK"
+		},
+		"LinkedAzureBlobStorage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LinkedAzureBlobStorage'"
+		},
+		"LinkedAzureBlobStorageravi_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LinkedAzureBlobStorageravi'"
+		},
+		"LinkedAzureDataLakeStore_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'LinkedAzureDataLakeStore'"
+		},
+		"LinkedAzureDatabricksrk_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'LinkedAzureDatabricksrk'"
+		},
+		"LinkedServiceAzureBlobStorage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LinkedServiceAzureBlobStorage'"
+		},
+		"LinkedServiceAzureBlobStorageDept_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LinkedServiceAzureBlobStorageDept'"
+		},
+		"LinkedServiceAzureSqlDatabase_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LinkedServiceAzureSqlDatabase'"
+		},
+		"LinkedServiceCosmosDbMongoDbApi_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LinkedServiceCosmosDbMongoDbApi'"
+		},
+		"LinkedserviceAzureBlobStorageEmp_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LinkedserviceAzureBlobStorageEmp'"
+		},
+		"LnkedsrvAzureSynapseAnalyticsrk_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LnkedsrvAzureSynapseAnalyticsrk'"
+		},
+		"Parameterize_LinkedService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Parameterize_LinkedService'"
+		},
+		"linkedServiceDataLake_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'linkedServiceDataLake'"
+		},
+		"LinkedAzureDataLakeStore_properties_typeProperties_dataLakeStoreUri": {
+			"type": "string",
+			"defaultValue": "https://datalakeravi.azuredatalakestore.net/webhdfs/v1"
+		},
+		"LinkedAzureDataLakeStore_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "06132eef-14f8-46a5-87fc-d31764adf060"
+		},
+		"LinkedAzureDataLakeStore_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "93f33571-550f-43cf-b09f-cd331338d086"
+		},
+		"LinkedAzureDataLakeStore_properties_typeProperties_subscriptionId": {
+			"type": "string",
+			"defaultValue": "047ae087-7d35-4c57-8fe9-7a442cc9cf16"
+		},
+		"LinkedAzureDataLakeStore_properties_typeProperties_resourceGroupName": {
+			"type": "string",
+			"defaultValue": "BigData_COE"
+		},
+		"LinkedServiceCosmosDbMongoDbApi_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "admin"
+		},
+		"RestServiceEMP_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "http://dummy.restapiexample.com/api/v1/employees"
+		},
+		"linkedServiceDataLake_properties_typeProperties_dataLakeStoreUri": {
+			"type": "string",
+			"defaultValue": "https://datalakeravi.azuredatalakestore.net/webhdfs/v1"
+		},
+		"linkedServiceDataLake_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "06132eef-14f8-46a5-87fc-d31764adf060"
+		},
+		"linkedServiceDataLake_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "93f33571-550f-43cf-b09f-cd331338d086"
+		},
+		"linkedServiceDataLake_properties_typeProperties_subscriptionId": {
+			"type": "string",
+			"defaultValue": "047ae087-7d35-4c57-8fe9-7a442cc9cf16"
+		},
+		"linkedServiceDataLake_properties_typeProperties_resourceGroupName": {
+			"type": "string",
+			"defaultValue": "BigData_COE"
+		},
+		"Loadoncondition_properties_Pipeline_VariableTestLoad_parameters_FileName": {
+			"type": "string",
+			"defaultValue": "@triggerBody().fileName"
+		},
+		"Loadoncondition_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/047ae087-7d35-4c57-8fe9-7a442cc9cf16/resourceGroups/BigData_COE/providers/Microsoft.Storage/storageAccounts/ravistorag1"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"LinkedAzureBlobStorage_connectionString": {
+						"value": "[parameters('LinkedAzureBlobStorage_connectionString')]"
+					},
+					"LinkedAzureBlobStorageravi_connectionString": {
+						"value": "[parameters('LinkedAzureBlobStorageravi_connectionString')]"
+					},
+					"LinkedAzureDataLakeStore_servicePrincipalKey": {
+						"value": "[parameters('LinkedAzureDataLakeStore_servicePrincipalKey')]"
+					},
+					"LinkedAzureDatabricksrk_accessToken": {
+						"value": "[parameters('LinkedAzureDatabricksrk_accessToken')]"
+					},
+					"LinkedServiceAzureBlobStorage_connectionString": {
+						"value": "[parameters('LinkedServiceAzureBlobStorage_connectionString')]"
+					},
+					"LinkedServiceAzureBlobStorageDept_connectionString": {
+						"value": "[parameters('LinkedServiceAzureBlobStorageDept_connectionString')]"
+					},
+					"LinkedServiceAzureSqlDatabase_connectionString": {
+						"value": "[parameters('LinkedServiceAzureSqlDatabase_connectionString')]"
+					},
+					"LinkedServiceCosmosDbMongoDbApi_connectionString": {
+						"value": "[parameters('LinkedServiceCosmosDbMongoDbApi_connectionString')]"
+					},
+					"LinkedserviceAzureBlobStorageEmp_connectionString": {
+						"value": "[parameters('LinkedserviceAzureBlobStorageEmp_connectionString')]"
+					},
+					"LnkedsrvAzureSynapseAnalyticsrk_connectionString": {
+						"value": "[parameters('LnkedsrvAzureSynapseAnalyticsrk_connectionString')]"
+					},
+					"Parameterize_LinkedService_connectionString": {
+						"value": "[parameters('Parameterize_LinkedService_connectionString')]"
+					},
+					"linkedServiceDataLake_servicePrincipalKey": {
+						"value": "[parameters('linkedServiceDataLake_servicePrincipalKey')]"
+					},
+					"LinkedAzureDataLakeStore_properties_typeProperties_dataLakeStoreUri": {
+						"value": "[parameters('LinkedAzureDataLakeStore_properties_typeProperties_dataLakeStoreUri')]"
+					},
+					"LinkedAzureDataLakeStore_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('LinkedAzureDataLakeStore_properties_typeProperties_servicePrincipalId')]"
+					},
+					"LinkedAzureDataLakeStore_properties_typeProperties_tenant": {
+						"value": "[parameters('LinkedAzureDataLakeStore_properties_typeProperties_tenant')]"
+					},
+					"LinkedAzureDataLakeStore_properties_typeProperties_subscriptionId": {
+						"value": "[parameters('LinkedAzureDataLakeStore_properties_typeProperties_subscriptionId')]"
+					},
+					"LinkedAzureDataLakeStore_properties_typeProperties_resourceGroupName": {
+						"value": "[parameters('LinkedAzureDataLakeStore_properties_typeProperties_resourceGroupName')]"
+					},
+					"LinkedServiceCosmosDbMongoDbApi_properties_typeProperties_database": {
+						"value": "[parameters('LinkedServiceCosmosDbMongoDbApi_properties_typeProperties_database')]"
+					},
+					"RestServiceEMP_properties_typeProperties_url": {
+						"value": "[parameters('RestServiceEMP_properties_typeProperties_url')]"
+					},
+					"linkedServiceDataLake_properties_typeProperties_dataLakeStoreUri": {
+						"value": "[parameters('linkedServiceDataLake_properties_typeProperties_dataLakeStoreUri')]"
+					},
+					"linkedServiceDataLake_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('linkedServiceDataLake_properties_typeProperties_servicePrincipalId')]"
+					},
+					"linkedServiceDataLake_properties_typeProperties_tenant": {
+						"value": "[parameters('linkedServiceDataLake_properties_typeProperties_tenant')]"
+					},
+					"linkedServiceDataLake_properties_typeProperties_subscriptionId": {
+						"value": "[parameters('linkedServiceDataLake_properties_typeProperties_subscriptionId')]"
+					},
+					"linkedServiceDataLake_properties_typeProperties_resourceGroupName": {
+						"value": "[parameters('linkedServiceDataLake_properties_typeProperties_resourceGroupName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"Loadoncondition_properties_Pipeline_VariableTestLoad_parameters_FileName": {
+						"value": "[parameters('Loadoncondition_properties_Pipeline_VariableTestLoad_parameters_FileName')]"
+					},
+					"Loadoncondition_properties_typeProperties_scope": {
+						"value": "[parameters('Loadoncondition_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ArmTemplate_2')]"
+			]
+		}
+	]
+}

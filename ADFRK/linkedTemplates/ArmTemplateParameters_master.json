@@ -1,0 +1,93 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "ADFRK"
+		},
+		"LinkedAzureBlobStorage_connectionString": {
+			"value": ""
+		},
+		"LinkedAzureBlobStorageravi_connectionString": {
+			"value": ""
+		},
+		"LinkedAzureDataLakeStore_servicePrincipalKey": {
+			"value": ""
+		},
+		"LinkedAzureDatabricksrk_accessToken": {
+			"value": ""
+		},
+		"LinkedServiceAzureBlobStorage_connectionString": {
+			"value": ""
+		},
+		"LinkedServiceAzureBlobStorageDept_connectionString": {
+			"value": ""
+		},
+		"LinkedServiceAzureSqlDatabase_connectionString": {
+			"value": ""
+		},
+		"LinkedServiceCosmosDbMongoDbApi_connectionString": {
+			"value": ""
+		},
+		"LinkedserviceAzureBlobStorageEmp_connectionString": {
+			"value": ""
+		},
+		"LnkedsrvAzureSynapseAnalyticsrk_connectionString": {
+			"value": ""
+		},
+		"Parameterize_LinkedService_connectionString": {
+			"value": ""
+		},
+		"linkedServiceDataLake_servicePrincipalKey": {
+			"value": ""
+		},
+		"LinkedAzureDataLakeStore_properties_typeProperties_dataLakeStoreUri": {
+			"value": "https://datalakeravi.azuredatalakestore.net/webhdfs/v1"
+		},
+		"LinkedAzureDataLakeStore_properties_typeProperties_servicePrincipalId": {
+			"value": "06132eef-14f8-46a5-87fc-d31764adf060"
+		},
+		"LinkedAzureDataLakeStore_properties_typeProperties_tenant": {
+			"value": "93f33571-550f-43cf-b09f-cd331338d086"
+		},
+		"LinkedAzureDataLakeStore_properties_typeProperties_subscriptionId": {
+			"value": "047ae087-7d35-4c57-8fe9-7a442cc9cf16"
+		},
+		"LinkedAzureDataLakeStore_properties_typeProperties_resourceGroupName": {
+			"value": "BigData_COE"
+		},
+		"LinkedServiceCosmosDbMongoDbApi_properties_typeProperties_database": {
+			"value": "admin"
+		},
+		"RestServiceEMP_properties_typeProperties_url": {
+			"value": "http://dummy.restapiexample.com/api/v1/employees"
+		},
+		"linkedServiceDataLake_properties_typeProperties_dataLakeStoreUri": {
+			"value": "https://datalakeravi.azuredatalakestore.net/webhdfs/v1"
+		},
+		"linkedServiceDataLake_properties_typeProperties_servicePrincipalId": {
+			"value": "06132eef-14f8-46a5-87fc-d31764adf060"
+		},
+		"linkedServiceDataLake_properties_typeProperties_tenant": {
+			"value": "93f33571-550f-43cf-b09f-cd331338d086"
+		},
+		"linkedServiceDataLake_properties_typeProperties_subscriptionId": {
+			"value": "047ae087-7d35-4c57-8fe9-7a442cc9cf16"
+		},
+		"linkedServiceDataLake_properties_typeProperties_resourceGroupName": {
+			"value": "BigData_COE"
+		},
+		"Loadoncondition_properties_Pipeline_VariableTestLoad_parameters_FileName": {
+			"value": "@triggerBody().fileName"
+		},
+		"Loadoncondition_properties_typeProperties_scope": {
+			"value": "/subscriptions/047ae087-7d35-4c57-8fe9-7a442cc9cf16/resourceGroups/BigData_COE/providers/Microsoft.Storage/storageAccounts/ravistorag1"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
