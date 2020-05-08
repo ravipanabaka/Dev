@@ -1,6 +1,33 @@
 {
 	"name": "Databrickslloadsql",
 	"properties": {
+		"activities": [
+			{
+				"name": "LoadSQLfromLocalfile",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Loadingdata",
+						"value": "from File to DB"
+					}
+				],
+				"typeProperties": {
+					"notebookPath": "/Users/ravi.kumar@dxc.com/loadtoazuresqldb"
+				},
+				"linkedServiceName": {
+					"referenceName": "LinkedServiceAzureDatabricks_loadsql",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
 		"annotations": []
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
