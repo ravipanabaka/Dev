@@ -20,7 +20,10 @@
 					}
 				],
 				"typeProperties": {
-					"notebookPath": "/Users/ravi.kumar@dxc.com/loadtoazuresqldb"
+					"notebookPath": "/Users/ravi.kumar@dxc.com/loadtoazuresqldb",
+					"baseParameters": {
+						"user": "dbserverravi"
+					}
 				},
 				"linkedServiceName": {
 					"referenceName": "LinkedServiceAzureDatabricks_loadsql",
