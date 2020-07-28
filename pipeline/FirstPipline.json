@@ -2,17 +2,6 @@
 	"name": "FirstPipline",
 	"properties": {
 		"description": "My first Program",
-		"activities": [
-			{
-				"name": "Wait1",
-				"type": "Wait",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"waitTimeInSeconds": 12
-				}
-			}
-		],
 		"annotations": []
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
