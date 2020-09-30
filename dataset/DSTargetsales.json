@@ -1,0 +1,21 @@
+{
+	"name": "DSTargetsales",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkesServicceAzureBlobStorageTargetsales",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "dxcstg"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
