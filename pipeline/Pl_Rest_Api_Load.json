@@ -1,0 +1,31 @@
+{
+	"name": "Pl_Rest_Api_Load",
+	"properties": {
+		"activities": [
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://airlabs.co/api/v9/airlines?api_key=273d74ae-8916-48c2-9df3-16dcd3c855e7?api-version=7.0",
+					"method": "GET",
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://vault.azure.net"
+					}
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-07-29T01:57:20Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,133 @@
+{
+	"name": "SCD general flow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Dept",
+						"type": "DatasetReference"
+					},
+					"name": "Dept"
+				},
+				{
+					"dataset": {
+						"referenceName": "Ds_Dept_scd1",
+						"type": "DatasetReference"
+					},
+					"name": "targetlookup"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Ds_Dept_scd1",
+						"type": "DatasetReference"
+					},
+					"name": "sinkInsertRecords"
+				},
+				{
+					"dataset": {
+						"referenceName": "Ds_Dept_scd1",
+						"type": "DatasetReference"
+					},
+					"name": "sinkUpdateRecords"
+				}
+			],
+			"transformations": [
+				{
+					"name": "lookupdept"
+				},
+				{
+					"name": "derivingFlag"
+				},
+				{
+					"name": "select"
+				},
+				{
+					"name": "InsertUpdateflows"
+				},
+				{
+					"name": "alterupdateflow"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          DEPT_NO as integer,",
+				"          D_NAME as string,",
+				"          {LOC       } as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Dept",
+				"source(output(",
+				"          depno as integer,",
+				"          dname as string,",
+				"          loc as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> targetlookup",
+				"Dept, select lookup(DEPT_NO == lkp_depno,",
+				"     multiple: false,",
+				"     pickup: 'first',",
+				"     asc(lkp_depno, true),",
+				"     broadcast: 'auto')~> lookupdept",
+				"lookupdept derive(Flag_Insert_Update = iif(isNull(lkp_depno), 'Insert','Update')) ~> derivingFlag",
+				"targetlookup select(mapColumn(",
+				"          lkp_depno = depno,",
+				"          lkp_dname = dname,",
+				"          lkp_loc = loc",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select",
+				"derivingFlag split(Flag_Insert_Update=='Insert',",
+				"     disjoint: false) ~> InsertUpdateflows@(insert, Update)",
+				"InsertUpdateflows@Update alterRow(updateIf(true())) ~> alterupdateflow",
+				"InsertUpdateflows@insert sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          depno as integer,",
+				"          dname as string,",
+				"          loc as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          depno = DEPT_NO,",
+				"          dname = D_NAME,",
+				"          loc = {LOC       }",
+				"     )) ~> sinkInsertRecords",
+				"alterupdateflow sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          depno as integer,",
+				"          dname as string,",
+				"          loc as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:true,",
+				"     upsertable:false,",
+				"     keys:['depno'],",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          depno = DEPT_NO,",
+				"          dname = D_NAME,",
+				"          loc = {LOC       }",
+				"     )) ~> sinkUpdateRecords"
+			]
+		}
+	}
+}

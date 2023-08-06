@@ -1,0 +1,37 @@
+{
+	"name": "DS_Dept",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_datalake7am",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "DEPT.csv",
+				"fileSystem": "sourcefiles"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "DEPT_NO",
+				"type": "String"
+			},
+			{
+				"name": "D_NAME",
+				"type": "String"
+			},
+			{
+				"name": "LOC       ",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

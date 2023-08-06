@@ -1,0 +1,63 @@
+{
+	"name": "dataflow SCD1 DEPT",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Dept",
+						"type": "DatasetReference"
+					},
+					"name": "DEPT"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Ds_Dept_scd1",
+						"type": "DatasetReference"
+					},
+					"name": "depttarget"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Newrecordcheck"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          DEPT_NO as integer,",
+				"          D_NAME as string,",
+				"          {LOC       } as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> DEPT",
+				"DEPT alterRow(upsertIf(true())) ~> Newrecordcheck",
+				"Newrecordcheck sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          depno as integer,",
+				"          dname as string,",
+				"          loc as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:false,",
+				"     upsertable:true,",
+				"     keys:['depno'],",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          depno = DEPT_NO,",
+				"          dname = D_NAME,",
+				"          loc = {LOC       }",
+				"     )) ~> depttarget"
+			]
+		}
+	}
+}

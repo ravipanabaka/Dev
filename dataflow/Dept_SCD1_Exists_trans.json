@@ -1,0 +1,122 @@
+{
+	"name": "Dept_SCD1_Exists_trans",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Dept",
+						"type": "DatasetReference"
+					},
+					"name": "deptsource"
+				},
+				{
+					"dataset": {
+						"referenceName": "Ds_Dept_scd1",
+						"type": "DatasetReference"
+					},
+					"name": "referencedept"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Ds_Dept_scd1",
+						"type": "DatasetReference"
+					},
+					"name": "sinkInsert",
+					"rejectedDataLinkedService": {
+						"referenceName": "LS_datalake7am",
+						"type": "LinkedServiceReference"
+					}
+				},
+				{
+					"dataset": {
+						"referenceName": "Ds_Dept_scd1",
+						"type": "DatasetReference"
+					},
+					"name": "sinkUpdate"
+				}
+			],
+			"transformations": [
+				{
+					"name": "notexists"
+				},
+				{
+					"name": "recordexists"
+				},
+				{
+					"name": "Recordupdate"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          DEPT_NO as integer,",
+				"          D_NAME as string,",
+				"          {LOC       } as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> deptsource",
+				"source(output(",
+				"          depno as integer,",
+				"          dname as string,",
+				"          loc as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> referencedept",
+				"deptsource, referencedept exists(DEPT_NO == depno,",
+				"     negate:true,",
+				"     broadcast: 'auto')~> notexists",
+				"deptsource, referencedept exists(DEPT_NO == depno,",
+				"     negate:false,",
+				"     broadcast: 'auto')~> recordexists",
+				"recordexists alterRow(updateIf(true())) ~> Recordupdate",
+				"notexists sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          depno as integer,",
+				"          dname as string,",
+				"          loc as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          depno = DEPT_NO,",
+				"          dname = D_NAME,",
+				"          loc = {LOC       }",
+				"     )) ~> sinkInsert",
+				"Recordupdate sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          depno as integer,",
+				"          dname as string,",
+				"          loc as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:true,",
+				"     upsertable:false,",
+				"     keys:['depno'],",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          depno = DEPT_NO,",
+				"          dname = D_NAME,",
+				"          loc = {LOC       }",
+				"     )) ~> sinkUpdate"
+			]
+		}
+	}
+}
